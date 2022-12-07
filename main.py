@@ -5,8 +5,7 @@ import time
 
 def f_accept_cookies(driver) :
     time.sleep(1)
-    cookie_button = driver.find_element(By.ID, "onetrust-accept-btn-handler")
-    cookie_button.click()
+    driver.find_element(By.ID, "onetrust-accept-btn-handler").click()
 
 def f_play_song(driver) :
     time.sleep(5)
