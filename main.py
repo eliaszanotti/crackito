@@ -9,7 +9,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from utils import *
 import csv
 import time 
-
+import random
+  
 def f_launch_driver(url, driver_exe) : 
     driver = webdriver.Chrome(driver_exe)
     driver.maximize_window()
@@ -32,9 +33,19 @@ def main() :
     driver.add_cookie(cookie)
     driver.get("{}/playlist/0WXMfN8PQKk9cFzkyhCUG2".format(url))
     f_play_song(driver)
+    f_repeat_button(driver)
+    i = 1
+    while (i < 500) :
+        time.sleep(random.randint(31, 60))
+        f_next_song(driver)
+        print("OK :", i) 
+        i += 1
+
     time.sleep(1000)
 
 main()
+
+
 
 #jtRqaoDIpIR6fEATUTyY
 #jtRqaoDIpIR6fEATUTyY  class of advertising
