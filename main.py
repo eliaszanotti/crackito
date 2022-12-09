@@ -1,26 +1,40 @@
+# selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+# files
+from utils import *
+import csv
 import time 
 
-def f_accept_cookies(driver) :
-    time.sleep(1)
-    driver.find_element(By.ID, "onetrust-accept-btn-handler").click()
+def f_launch_driver(url, driver_exe) : 
+    driver = webdriver.Chrome(driver_exe)
+    driver.maximize_window()
+    driver.get(url)
+    return driver
 
-def f_play_song(driver) :
-    time.sleep(5)
-    driver.find_element(By.CLASS_NAME, "futnNt").click()
+def f_get_cookie(csv_file) :
+    with open(csv_file, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            return row['VALUE']
 
 def main() :
     url = "https://open.spotify.com"
-    driver = webdriver.Chrome("chromedriver")
-    driver.get(url)
-    cookie = {'name' : 'sp_dc', 'value' : 'AQDtiTt2-EjQDbHNrOh0NsLbZ_tSbmGPCqFc_5c2ORruTC1od0E9hMfmAEAJpX-w7o0aac4Hk-DDUIgFik7E3dujW10RkQtHJmG8hwOm_9OqZbPPMchjHWULbl8oAMVf9H-lWEgdVJLQ5I40n8MLM3Zc6mt9LOlz'}
-    driver.add_cookie(cookie)
+    driver = f_launch_driver(url, "chromedriver")
+    driver.implicitly_wait(10)
+    cookie = {'name' : 'sp_dc', 'value' : f_get_cookie('cookies.csv')}
+
     f_accept_cookies(driver)
+    driver.add_cookie(cookie)
     driver.get("{}/playlist/0WXMfN8PQKk9cFzkyhCUG2".format(url))
     f_play_song(driver)
     time.sleep(1000)
 
-if __name__ == "__main__":
-   main()
+main()
+
+#jtRqaoDIpIR6fEATUTyY
+#jtRqaoDIpIR6fEATUTyY  class of advertising
