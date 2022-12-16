@@ -12,8 +12,11 @@ import time
 import random
   
 def f_launch_driver(url, driver_exe) : 
+    #driver = webdriver.Chrome(r'/usr/bin/chromium')
     driver = webdriver.Chrome(driver_exe)
+    #driver = webdriver.Firefox()
     driver.maximize_window()
+    driver.get("https://google.com/")
     driver.get(url)
     return driver
 
@@ -21,14 +24,15 @@ def f_get_cookie(csv_file) :
     with open(csv_file, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            return row['VALUE']
+            return row['VALUE'][0]
 
 def main() :
     url = "https://open.spotify.com"
     driver = f_launch_driver(url, "chromedriver")
     driver.implicitly_wait(10)
-    cookie = {'name' : 'sp_dc', 'value' : f_get_cookie('cookies.csv')}
-
+    #cookie = {'name' : 'sp_dc', 'value' : f_get_cookie('cookies.csv')}
+    cookie = {'name' : 'sp_dc', 'value' : 'AQB8HBUT67hKDPPwZrnOD_52CDquJssARaokfSrz0PIQBD9klwWvMHjpbaNChbfx4e3LuEadIfXLhAp-H74hYVFeXdmrpCwOgvRhICaTbsEQBNxq3dYPDY5Qi-tZvpWBD5wHZbBrfZQR9s3E-Ljql-YPAdZxhv-D'}
+	
     f_accept_cookies(driver)
     driver.add_cookie(cookie)
     driver.get("{}/playlist/0WXMfN8PQKk9cFzkyhCUG2".format(url))
