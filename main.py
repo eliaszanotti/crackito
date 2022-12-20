@@ -19,23 +19,32 @@ def f_launch_driver(url, driver_exe) :
     options.set_preference("media.gmp-manager.updateEnabled", True);
     driver = webdriver.Firefox(options=options)
     #driver = webdriver.Chrome(driver_exe)
-    driver.maximize_window()
     driver.get(url)
     print(colors.BLUE + "[Home page reached]" + colors.RESET)
     return driver
 
-def f_get_cookie(csv_file) :
-    with open(csv_file, newline='') as csvfile:
+def f_get_nb_driver(csv_file) :
+    with open(csv_file, newline='') as csvfile :
         reader = csv.DictReader(csvfile)
-        for row in reader:
-            return row['VALUE'][0]
+        i = 0
+        for row in reader :
+            i += 1
+        return (i)
+
+def f_get_cookie(csv_file, nb) :
+    with open(csv_file, newline='') as csvfile :
+        reader = csv.DictReader(csvfile)
+        i = 0
+        for row in reader :
+            if (i == nb) :
+                return(row['VALUE'])
+            i += 1
 
 def main() :
     url = "https://open.spotify.com"
     driver = f_launch_driver(url, "chromedriver")
     driver.implicitly_wait(10)
-    #cookie = {'name' : 'sp_dc', 'value' : f_get_cookie('cookies.csv')}
-    cookie = {'name' : 'sp_dc', 'value' : 'AQB8HBUT67hKDPPwZrnOD_52CDquJssARaokfSrz0PIQBD9klwWvMHjpbaNChbfx4e3LuEadIfXLhAp-H74hYVFeXdmrpCwOgvRhICaTbsEQBNxq3dYPDY5Qi-tZvpWBD5wHZbBrfZQR9s3E-Ljql-YPAdZxhv-D'}
+    cookie = {'name' : 'sp_dc', 'value' : f_get_cookie('cookies.csv', 2)}
     f_accept_cookies(driver)
     driver.add_cookie(cookie)
     driver.get("{}/playlist/0WXMfN8PQKk9cFzkyhCUG2".format(url))
@@ -44,11 +53,20 @@ def main() :
     f_repeat_button(driver)
     i = 1
     while (i < 500) :
-        time.sleep(random.randint(31, 60))
+        random_skip = random.randint(31, 60)
+        time.sleep(random_skip)
         f_next_song(driver)
-        print(colors.GREEN + "[Stream]", i, colors.RESET) 
+        print(colors.GREEN + "[Stream after"\
+		    , random_skip, "s]", i, colors.RESET) 
         i += 1
+
+print(f_get_nb_driver('cookies.csv'))
+print(f_get_cookie('cookies.csv', 0))
+print(f_get_cookie('cookies.csv', 1))
+print(f_get_cookie('cookies.csv', 2))
+
 
 main()
 
 #jtRqaoDIpIR6fEATUTyY  class of advertising
+#touchable class of dismiss button for premium account 
